@@ -63,38 +63,6 @@ namespace gestionPagos.Controllers
             return pedido;
         }
 
-        // Get: api/Pedidos/5
-        [HttpGet("GetPedidosPago/{id}")]
-        public async Task<ActionResult<Pedido>> GetPedidosPago(int id)
-        {
-            var pedido = _context.Pedidos.Where(ped => ped.Id == id).FirstOrDefault();
-
-            if (pedido.IdEstado == 1)
-            {
-                var factura = new Factura();
-                factura.Fecha = DateTime.Today;
-                factura.IdPedido = pedido.Id;
-                factura.Total = _context.Asignacions.Sum(ped => ped.Costo);
-            }
-
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!PedidoExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
-
-            return NoContent();
-        }
 
         // PUT: api/Pedidos/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -114,6 +82,8 @@ namespace gestionPagos.Controllers
                 factura.Fecha = DateTime.Today;
                 factura.IdPedido = pedido.Id;
                 factura.Total = _context.Asignacions.Sum(ped => ped.Costo);
+
+                _context.Facturas.Add(factura);
             }
 
             try
