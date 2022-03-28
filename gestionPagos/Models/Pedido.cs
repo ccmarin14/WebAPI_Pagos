@@ -10,6 +10,7 @@ namespace gestionPagos.Models
         public Pedido()
         {
             Asignacions = new HashSet<Asignacion>();
+            Envios = new HashSet<Envio>();
             Facturas = new HashSet<Factura>();
         }
 
@@ -22,6 +23,7 @@ namespace gestionPagos.Models
         public virtual Contacto IdProveedorNavigation { get; set; }
         public virtual Contacto IdUsuarioNavigation { get; set; }
         public virtual ICollection<Asignacion> Asignacions { get; set; }
+        public virtual ICollection<Envio> Envios { get; set; }
         public virtual ICollection<Factura> Facturas { get; set; }
     }
 }

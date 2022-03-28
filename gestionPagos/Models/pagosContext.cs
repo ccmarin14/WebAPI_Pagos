@@ -19,6 +19,7 @@ namespace gestionPagos.Models
 
         public virtual DbSet<Asignacion> Asignacions { get; set; }
         public virtual DbSet<Contacto> Contactos { get; set; }
+        public virtual DbSet<Envio> Envios { get; set; }
         public virtual DbSet<Estado> Estados { get; set; }
         public virtual DbSet<Factura> Facturas { get; set; }
         public virtual DbSet<Pedido> Pedidos { get; set; }
@@ -111,6 +112,36 @@ namespace gestionPagos.Models
                     .WithMany(p => p.Contactos)
                     .HasForeignKey(d => d.Tipo)
                     .HasConstraintName("FK_contacto_contacto");
+            });
+
+            modelBuilder.Entity<Envio>(entity =>
+            {
+                entity.ToTable("envio");
+
+                entity.Property(e => e.Id)
+                    .ValueGeneratedNever()
+                    .HasColumnName("id");
+
+                entity.Property(e => e.FechaEntrega)
+                    .HasColumnType("date")
+                    .HasColumnName("fechaEntrega");
+
+                entity.Property(e => e.FechaEstimada)
+                    .HasColumnType("date")
+                    .HasColumnName("fechaEstimada");
+
+                entity.Property(e => e.Guia)
+                    .IsRequired()
+                    .HasMaxLength(30)
+                    .IsUnicode(false)
+                    .HasColumnName("guia");
+
+                entity.Property(e => e.IdPedido).HasColumnName("id_pedido");
+
+                entity.HasOne(d => d.IdPedidoNavigation)
+                    .WithMany(p => p.Envios)
+                    .HasForeignKey(d => d.IdPedido)
+                    .HasConstraintName("FK_envio_pedido");
             });
 
             modelBuilder.Entity<Estado>(entity =>
