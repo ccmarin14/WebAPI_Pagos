@@ -41,6 +41,31 @@ namespace gestionPagos.Controllers
             return factura;
         }
 
+        // GET: api/GetPedidosDetalles/id
+        [HttpGet("GetFacturaDetalles/{id}")]
+        public async Task<ActionResult<Factura>> GetPedidosDetalles(int id)
+        {
+            var factura = _context.Facturas
+                                        .Include(fact => fact.IdPedidoNavigation)
+                                            .ThenInclude(user => user.IdUsuarioNavigation)
+                                        .Include(fact => fact.IdPedidoNavigation)
+                                            .ThenInclude(asg => asg.Asignacions)
+                                        .Include(fact => fact.IdPedidoNavigation)
+                                            .ThenInclude(est => est.IdEstadoNavigation)
+                                        .Include(fact => fact.IdPedidoNavigation)
+                                            .ThenInclude(asg => asg.Asignacions)
+                                            .ThenInclude(prod => prod.IdProductoNavigation)
+                                        .Where(fact => fact.Consecutivo == id)
+                                        .FirstOrDefault();
+
+            if (factura == null)
+            {
+                return NotFound();
+            }
+
+            return factura;
+        }
+
         // PUT: api/Facturas/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]

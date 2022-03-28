@@ -41,7 +41,7 @@ namespace gestionPagos.Controllers
             return pedido;
         }
 
-        // GET: api/Pedidos/id
+        // GET: api/GetPedidosDetalles/id
         [HttpGet("GetPedidosDetalles/{id}")]
         public async Task<ActionResult<Pedido>> GetPedidosDetalles(int id)
         {
@@ -79,7 +79,7 @@ namespace gestionPagos.Controllers
             if (pedido.IdEstado == 2)
             {
                 var factura = new Factura();
-                factura.Fecha = DateTime.Today;
+                factura.Fecha = DateTime.Now;
                 factura.IdPedido = pedido.Id;
                 factura.Total = _context.Asignacions.Sum(ped => ped.Costo);
 
