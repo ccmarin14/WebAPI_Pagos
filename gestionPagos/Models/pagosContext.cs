@@ -118,17 +118,15 @@ namespace gestionPagos.Models
             {
                 entity.ToTable("envio");
 
-                entity.Property(e => e.Id)
-                    .ValueGeneratedNever()
-                    .HasColumnName("id");
+                entity.Property(e => e.Id).HasColumnName("id");
 
                 entity.Property(e => e.FechaEntrega)
                     .HasColumnType("date")
-                    .HasColumnName("fechaEntrega");
+                    .HasColumnName("fecha_entrega");
 
                 entity.Property(e => e.FechaEstimada)
                     .HasColumnType("date")
-                    .HasColumnName("fechaEstimada");
+                    .HasColumnName("fecha_estimada");
 
                 entity.Property(e => e.Guia)
                     .IsRequired()
@@ -141,6 +139,7 @@ namespace gestionPagos.Models
                 entity.HasOne(d => d.IdPedidoNavigation)
                     .WithMany(p => p.Envios)
                     .HasForeignKey(d => d.IdPedido)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_envio_pedido");
             });
 

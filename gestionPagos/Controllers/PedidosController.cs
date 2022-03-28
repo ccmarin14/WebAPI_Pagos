@@ -51,6 +51,7 @@ namespace gestionPagos.Controllers
                                         .Include(ped => ped.IdEstadoNavigation)
                                         .Include(ped => ped.IdUsuarioNavigation)
                                         .Include(ped => ped.IdProveedorNavigation)
+                                        .Include(ped => ped.Envios)
                                         .Include(ped => ped.Facturas)
                                         .Where(ped => ped.Id == id)
                                         .FirstOrDefault();
@@ -84,6 +85,14 @@ namespace gestionPagos.Controllers
                 factura.Total = _context.Asignacions.Sum(ped => ped.Costo);
 
                 _context.Facturas.Add(factura);
+
+                var envio = new Envio();
+                envio.Guia = DateTime.Today.ToString() + id.ToString();
+                envio.Guia = string.Join("", envio.Guia.Split(':','/'));
+                envio.FechaEstimada = (DateTime.Today.AddDays(10));
+                envio.IdPedido = id;
+
+                _context.Envios.Add(envio);
             }
 
             try
